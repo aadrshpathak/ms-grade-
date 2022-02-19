@@ -47,12 +47,23 @@ function updatTile(tile, num) {
   }
 }
 
-
+// Event listener function for arrow keys
 document.addEventListener('keyup', (e) => {
     if (e.code == "ArrowLeft") {
         slideLeft();
     }
+    else if (e.code == "ArrowRight") {
+        slideRight();
+    }
+    else if (e.code == "ArrowUp") {
+        slideUp();
+    }
+    else if (e.code == "ArrowDown") {
+        slideDown();
+    }
 })
+
+
 
 function filterZeros(row) {
     return row.filter(num => num != 0)      // it will create new array without zeros   
@@ -80,7 +91,7 @@ function slide(row) {
 }
 
 
-
+// Funtion to Slide left with left arrow key
 function slideLeft() {
     for (let r = 0; r < rows; r++) {
         let row = board[r];
@@ -88,6 +99,60 @@ function slideLeft() {
         board[r] = row;
 
         for (let c = 0; c < cols; c++) {
+            let tile = document.getElementById(r.toString() + '-' + c.toString());
+            let num = board[r][c];
+            updatTile(tile, num);
+        }
+    }
+}
+
+//Function to slide right with right arrow key
+function slideRight() {
+    for (let r = 0; r < rows; r++) {
+        let row = board[r];
+        row.reverse();                   // reversing the row
+        row = slide(row);
+        row.reverse()
+        board[r] = row;
+
+        for (let c = 0; c < cols; c++) {
+            let tile = document.getElementById(r.toString() + '-' + c.toString());
+            let num = board[r][c];
+            updatTile(tile, num);
+        }
+    }
+}
+
+//Function to slide up with  arrowUp key
+function slideUp() {
+    for (let c = 0; c < cols; c++) {
+        let row = [board[0][c], board[1][c], board[2][c], board[3][c]];  // Transposing the cols into row
+        row = slide(row); 
+        board[0][c] = row[0];             // Giving number-tiles back to the cols
+        board[1][c] = row[1];
+        board[2][c] = row[2];
+        board[3][c] = row[3];
+        for (let r = 0; r < rows; r++) {
+            let tile = document.getElementById(r.toString() + '-' + c.toString());
+            let num = board[r][c];
+            updatTile(tile, num);
+        }
+    }
+}
+
+//Function to slide down with  arrowDown key
+function slideDown() {
+    for (let c = 0; c < cols; c++) {
+        let row = [board[0][c], board[1][c], board[2][c], board[3][c]];  // Transposing the cols into row
+        row.reverse();                       //reversing the row
+        row = slide(row); 
+        row.reverse();
+        // board[0][c] = row[0];             // Giving number-tiles back to the cols
+        // board[1][c] = row[1];
+        // board[2][c] = row[2];
+        // board[3][c] = row[3];
+        for (let r = 0; r < rows; r++) {
+            board[r][c] = row[r];
             let tile = document.getElementById(r.toString() + '-' + c.toString());
             let num = board[r][c];
             updatTile(tile, num);
