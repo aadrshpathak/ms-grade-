@@ -3,24 +3,28 @@ var score = 0;
 var rows = 4;
 var cols = 4;
 
+function reloadGame() {
+  location.reload();
+}
+
 window.onload = function () {
   setGame();
 };
 
 function setGame() {
-   board = [
+  board = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ];
 
-//   board = [
-//     [2, 2, 2, 2],
-//     [2, 2, 2, 2],
-//     [4, 4, 8, 8],
-//     [4, 4, 8, 8],
-//   ];
+  //   board = [
+  //     [2, 2, 2, 2],
+  //     [2, 2, 2, 2],
+  //     [4, 4, 8, 8],
+  //     [4, 4, 8, 8],
+  //   ];
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -35,40 +39,37 @@ function setGame() {
   setTwo();
 }
 
-
-// Checking in the board if there is a blank spot 
+// Checking in the board if there is a blank spot
 function hasEmptyTile() {
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (board[r][c] == 0) {
-                return true;
-            }
-        }
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] == 0) {
+        return true;
+      }
     }
-    return false;
+  }
+  return false;
 }
 
-
-// Function to find blank spot and set it with 2 
+// Function to find blank spot and set it with 2
 function setTwo() {
-    if (!hasEmptyTile()) {
-        return;
-    }
-    let found = false;
-    while(!found) {
-        let r = Math.floor(Math.random() * rows);
-        let c = Math.floor(Math.random() * cols);
+  if (!hasEmptyTile()) {
+    return;
+  }
+  let found = false;
+  while (!found) {
+    let r = Math.floor(Math.random() * rows);
+    let c = Math.floor(Math.random() * cols);
 
-        if (board[r][c] == 0) {
-            board[r][c] = 2;
-            let tile = document.getElementById(r.toString() + '-' + c.toString());
-            tile.innerText = "2";
-            tile.classList.add("n2");
-            found = true;
-        }
+    if (board[r][c] == 0) {
+      board[r][c] = 2;
+      let tile = document.getElementById(r.toString() + "-" + c.toString());
+      tile.innerText = "2";
+      tile.classList.add("n2");
+      found = true;
     }
+  }
 }
-
 
 function updatTile(tile, num) {
   tile.innerText = ""; // clearing the inner text of the tile
@@ -85,119 +86,124 @@ function updatTile(tile, num) {
 }
 
 // Event listener function for arrow keys
-document.addEventListener('keyup', (e) => {
-    if (e.code == "ArrowLeft") {
-        slideLeft();
-        setTwo();
-    }
-    else if (e.code == "ArrowRight") {
-        slideRight();
-        setTwo();
-    }
-    else if (e.code == "ArrowUp") {
-        slideUp();
-        setTwo();
-    }
-    else if (e.code == "ArrowDown") {
-        slideDown();
-        setTwo();
-    }
-    document.getElementById("score").innerText = score;
-})
-
-
+document.addEventListener("keyup", (e) => {
+  if (e.code == "ArrowLeft") {
+    slideLeft();
+    setTwo();
+  } else if (e.code == "ArrowRight") {
+    slideRight();
+    setTwo();
+  } else if (e.code == "ArrowUp") {
+    slideUp();
+    setTwo();
+  } else if (e.code == "ArrowDown") {
+    slideDown();
+    setTwo();
+  }
+  document.getElementById("score").innerText = score;
+});
 
 function filterZeros(row) {
-    return row.filter(num => num != 0)      // it will create new array without zeros   
+  return row.filter((num) => num != 0); // it will create new array without zeros
 }
 
 function slide(row) {
-    //[0, 2, 2, 2]
-    row = filterZeros(row);        // it will remove all the zeros from the row - [2, 2, 2]
+  //[0, 2, 2, 2]
+  row = filterZeros(row); // it will remove all the zeros from the row - [2, 2, 2]
 
-    //slide functionality
-    for (let i = 0; i < row.length - 1; i++) {
-        if (row[i] == row[i + 1]) {
-            row[i] *= 2;
-            row[i + 1] = 0;
-            score += row[i];     //[2, 2, 2] -> [4, 0, 2]
-        }
+  //slide functionality
+  for (let i = 0; i < row.length - 1; i++) {
+    if (row[i] == row[i + 1]) {
+      row[i] *= 2;
+      row[i + 1] = 0;
+      score += row[i]; //[2, 2, 2] -> [4, 0, 2]
     }
-    row = filterZeros(row);    // [4, 2]
+  }
+  row = filterZeros(row); // [4, 2]
 
-    // adding zeros back to the row at end
-    while (row.length < cols) {
-        row.push(0);                //[4, 2, 0, 0]
-    }                           
-    return row 
+  // adding zeros back to the row at end
+  while (row.length < cols) {
+    row.push(0); //[4, 2, 0, 0]
+  }
+  return row;
 }
-
 
 // Funtion to Slide left with left arrow key
 function slideLeft() {
-    for (let r = 0; r < rows; r++) {
-        let row = board[r];
-        row = slide(row);
-        board[r] = row;
+  for (let r = 0; r < rows; r++) {
+    let row = board[r];
+    row = slide(row);
+    board[r] = row;
 
-        for (let c = 0; c < cols; c++) {
-            let tile = document.getElementById(r.toString() + '-' + c.toString());
-            let num = board[r][c];
-            updatTile(tile, num);
-        }
+    for (let c = 0; c < cols; c++) {
+      let tile = document.getElementById(r.toString() + "-" + c.toString());
+      let num = board[r][c];
+      updatTile(tile, num);
     }
+  }
 }
 
 //Function to slide right with right arrow key
 function slideRight() {
-    for (let r = 0; r < rows; r++) {
-        let row = board[r];
-        row.reverse();                   // reversing the row
-        row = slide(row);
-        row.reverse()
-        board[r] = row;
+  for (let r = 0; r < rows; r++) {
+    let row = board[r];
+    row.reverse(); // reversing the row
+    row = slide(row);
+    row.reverse();
+    board[r] = row;
 
-        for (let c = 0; c < cols; c++) {
-            let tile = document.getElementById(r.toString() + '-' + c.toString());
-            let num = board[r][c];
-            updatTile(tile, num);
-        }
+    for (let c = 0; c < cols; c++) {
+      let tile = document.getElementById(r.toString() + "-" + c.toString());
+      let num = board[r][c];
+      updatTile(tile, num);
     }
+  }
 }
 
 //Function to slide up with  arrowUp key
 function slideUp() {
-    for (let c = 0; c < cols; c++) {
-        let row = [board[0][c], board[1][c], board[2][c], board[3][c]];  // Transposing the cols into row
-        row = slide(row); 
-        board[0][c] = row[0];             // Giving number-tiles back to the cols
-        board[1][c] = row[1];
-        board[2][c] = row[2];
-        board[3][c] = row[3];
-        for (let r = 0; r < rows; r++) {
-            let tile = document.getElementById(r.toString() + '-' + c.toString());
-            let num = board[r][c];
-            updatTile(tile, num);
-        }
+  for (let c = 0; c < cols; c++) {
+    let row = [board[0][c], board[1][c], board[2][c], board[3][c]]; // Transposing the cols into row
+    row = slide(row);
+    board[0][c] = row[0]; // Giving number-tiles back to the cols
+    board[1][c] = row[1];
+    board[2][c] = row[2];
+    board[3][c] = row[3];
+    for (let r = 0; r < rows; r++) {
+      let tile = document.getElementById(r.toString() + "-" + c.toString());
+      let num = board[r][c];
+      updatTile(tile, num);
     }
+  }
 }
 
 //Function to slide down with  arrowDown key
 function slideDown() {
-    for (let c = 0; c < cols; c++) {
-        let row = [board[0][c], board[1][c], board[2][c], board[3][c]];  // Transposing the cols into row
-        row.reverse();                       //reversing the row
-        row = slide(row); 
-        row.reverse();
-        // board[0][c] = row[0];             // Giving number-tiles back to the cols
-        // board[1][c] = row[1];
-        // board[2][c] = row[2];
-        // board[3][c] = row[3];
-        for (let r = 0; r < rows; r++) {
-            board[r][c] = row[r];
-            let tile = document.getElementById(r.toString() + '-' + c.toString());
-            let num = board[r][c];
-            updatTile(tile, num);
-        }
+  for (let c = 0; c < cols; c++) {
+    let row = [board[0][c], board[1][c], board[2][c], board[3][c]]; // Transposing the cols into row
+    row.reverse(); //reversing the row
+    row = slide(row);
+    row.reverse();
+    // board[0][c] = row[0];             // Giving number-tiles back to the cols
+    // board[1][c] = row[1];
+    // board[2][c] = row[2];
+    // board[3][c] = row[3];
+    for (let r = 0; r < rows; r++) {
+      board[r][c] = row[r];
+      let tile = document.getElementById(r.toString() + "-" + c.toString());
+      let num = board[r][c];
+      updatTile(tile, num);
     }
+  }
+}
+
+// Showing winner if you reach the number 2048
+function winner() {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] == 2048) {
+        console.log("Congratulations!! You won!");
+      }
+    }
+  }
 }

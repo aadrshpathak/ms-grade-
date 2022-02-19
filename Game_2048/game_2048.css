@@ -1,18 +1,38 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.gameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+  margin: 0 40px;
+}
+
+button#restart {
+  width: 150px;
+  height: 45px;
+  background-color: #F14A16;
+  color: #ffffff;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 hr {
   width: 500px;
-  height: 3px;
+  height: 5px;
+  background-color: #E3B7A0;
 }
 
 #board {
   width: 400px;
   height: 400px;
   background-color: #EDCDBB;
-  border: 6px solid #E3B7A0;
+  border: 5px solid #E3B7A0;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -84,4 +104,47 @@ hr {
 .n16384 {
   background-color: palegreen;
   color: #727371;
+}
+
+
+@media screen and (max-width: 768px) {
+  .gameContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 20px;
+  }
+  button#restart { 
+    margin-top: 30px;
+  }
+
+
+}
+@media screen and (max-width: 576px) {
+  .gameContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 5px;
+  }
+  button#restart {
+    width: 140px;
+    height: 42px;  
+    margin-top: 30px;
+  }
+  
+  #board {
+    width: 320px;
+    height: 320px;
+    border: 3px solid #E3B7A0;
+  }
+  
+  .tile {
+    width: 74px;
+    height: 74px;
+    border: 3px solid #E3B7A0;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
 }
