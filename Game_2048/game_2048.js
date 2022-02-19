@@ -8,19 +8,19 @@ window.onload = function () {
 };
 
 function setGame() {
-//    board = [
-//     [0, 0, 0, 0],
-//     [0, 0, 0, 0],
-//     [0, 0, 0, 0],
-//     [0, 0, 0, 0],
-//   ];
-
-  board = [
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-    [4, 4, 8, 8],
-    [4, 4, 8, 8],
+   board = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
   ];
+
+//   board = [
+//     [2, 2, 2, 2],
+//     [2, 2, 2, 2],
+//     [4, 4, 8, 8],
+//     [4, 4, 8, 8],
+//   ];
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -31,7 +31,44 @@ function setGame() {
       document.getElementById("board").append(tile);
     }
   }
+  setTwo();
+  setTwo();
 }
+
+
+// Checking in the board if there is a blank spot 
+function hasEmptyTile() {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (board[r][c] == 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+// Function to find blank spot and set it with 2 
+function setTwo() {
+    if (!hasEmptyTile()) {
+        return;
+    }
+    let found = false;
+    while(!found) {
+        let r = Math.floor(Math.random() * rows);
+        let c = Math.floor(Math.random() * cols);
+
+        if (board[r][c] == 0) {
+            board[r][c] = 2;
+            let tile = document.getElementById(r.toString() + '-' + c.toString());
+            tile.innerText = "2";
+            tile.classList.add("n2");
+            found = true;
+        }
+    }
+}
+
 
 function updatTile(tile, num) {
   tile.innerText = ""; // clearing the inner text of the tile
@@ -51,16 +88,21 @@ function updatTile(tile, num) {
 document.addEventListener('keyup', (e) => {
     if (e.code == "ArrowLeft") {
         slideLeft();
+        setTwo();
     }
     else if (e.code == "ArrowRight") {
         slideRight();
+        setTwo();
     }
     else if (e.code == "ArrowUp") {
         slideUp();
+        setTwo();
     }
     else if (e.code == "ArrowDown") {
         slideDown();
+        setTwo();
     }
+    document.getElementById("score").innerText = score;
 })
 
 
@@ -85,8 +127,8 @@ function slide(row) {
 
     // adding zeros back to the row at end
     while (row.length < cols) {
-        row.push(0);
-    }                             //[4, 2, 0, 0]
+        row.push(0);                //[4, 2, 0, 0]
+    }                           
     return row 
 }
 
