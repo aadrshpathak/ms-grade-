@@ -7,8 +7,15 @@ function reloadGame() {
   location.reload();
 }
 
+function showInfo() {
+  alert(
+    "Tiles with matching number values will be merged into a single tile, which receives the sum of values. To move the board use the direction arrow keys. To win the game get a 2048 tile."
+  );
+}
+
 window.onload = function () {
   setGame();
+  showInfo();
 };
 
 function setGame() {
@@ -54,7 +61,7 @@ function hasEmptyTile() {
 // Function to find blank spot and set it with 2
 function setTwo() {
   if (!hasEmptyTile()) {
-    return;
+    return gameOver();
   }
   let found = false;
   while (!found) {
@@ -90,15 +97,19 @@ document.addEventListener("keyup", (e) => {
   if (e.code == "ArrowLeft") {
     slideLeft();
     setTwo();
+    winner();
   } else if (e.code == "ArrowRight") {
     slideRight();
     setTwo();
+    winner();
   } else if (e.code == "ArrowUp") {
     slideUp();
     setTwo();
+    winner();
   } else if (e.code == "ArrowDown") {
     slideDown();
     setTwo();
+    winner();
   }
   document.getElementById("score").innerText = score;
 });
@@ -202,8 +213,25 @@ function winner() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       if (board[r][c] == 2048) {
-        console.log("Congratulations!! You won!");
+        let result = document.getElementById("result");
+        result.innerHTML = "<h3> Congratulations!! You won! </h3>";
       }
     }
+  }
+}
+
+// function to show the Game over if there is no blank tiles ramaining
+function gameOver() {
+  let zeros = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] == 0) {
+        zeros++;
+      }
+    }
+  }
+  if (zeros == 0) {
+    let result = document.getElementById("result");
+    result.innerHTML = "<h3> Game Over, You lose!! </h3>";
   }
 }
